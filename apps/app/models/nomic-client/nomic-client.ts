@@ -1,31 +1,27 @@
-import init, * as nomic from "nomic-wasm-dev";
-import Long  from "long";
-import { Validator, getAllValidators } from "../validator";
-import { Delegation, getDelegations } from "../delegation";
-import { makeAutoObservable } from "mobx";
-import { config } from "../../config";
-import { DepositAddress } from "nomic-wasm-dev";
-import { SigningStargateClient, GasPrice, MsgTransferEncodeObject } from "@cosmjs/stargate";
-import { IbcChain, EvmosChain, NomicChain } from "../ibc-chain";
-import { Decimal } from "@cosmjs/math";
-import { fromBech32, toBech32 } from "@cosmjs/encoding";
-import { Wallet } from "../wallet/wallet";
-import { Keplr } from "../wallet/keplr";
-import { Metamask } from "../wallet/metamask";
-import {
-  UnbondingValidator,
-} from "../unbonding-validator";
-import {
-  StakedValidator,
-} from "../staked-validator";
-import { NomicClientInterface } from "./nomic-client-interface";
-import { Airdrop, Incentives } from "../reward";
-import { makeStdTx } from "@cosmjs/amino";
-import { EthSignType } from "@keplr-wallet/types";
-import { fromRpcSig } from "@ethereumjs/util";
-import { EvmosAirdropState } from "../../models/evmos-airdrop-state";
+import init, * as nomic from '@oraichain/oraibtc-wasm';
+import Long from 'long';
+import { Validator, getAllValidators } from '../validator';
+import { Delegation, getDelegations } from '../delegation';
+import { makeAutoObservable } from 'mobx';
+import { config } from '../../config';
+import { DepositAddress } from '@oraichain/oraibtc-wasm';
+import { SigningStargateClient, GasPrice, MsgTransferEncodeObject } from '@cosmjs/stargate';
+import { IbcChain, OraichainChain, OraiBtcSubnetChain } from '../ibc-chain';
+import { Decimal } from '@cosmjs/math';
+import { fromBech32, toBech32 } from '@cosmjs/encoding';
+import { Wallet } from '../wallet/wallet';
+import { Keplr } from '../wallet/keplr';
+import { Metamask } from '../wallet/metamask';
+import { UnbondingValidator } from '../unbonding-validator';
+import { StakedValidator } from '../staked-validator';
+import { NomicClientInterface } from './nomic-client-interface';
+import { Airdrop, Incentives } from '../reward';
+import { makeStdTx } from '@cosmjs/amino';
+import { EthSignType } from '@keplr-wallet/types';
+import { fromRpcSig } from '@ethereumjs/util';
+import { EvmosAirdropState } from '../../models/evmos-airdrop-state';
 
-declare type Nomic = typeof import("nomic-wasm-dev");
+declare type Nomic = typeof import('@oraichain/oraibtc-wasm');
 
 export class NomicClient implements NomicClientInterface {
   readonly modifier = BigInt(1e6);
@@ -54,12 +50,12 @@ export class NomicClient implements NomicClientInterface {
   }
 
   getCurrentWallet(): Wallet | null {
-    const currentWallet = localStorage.getItem("nomic/wallet");
+    const currentWallet = localStorage.getItem('nomic/wallet');
 
     let wallet = null;
-    if (currentWallet === "keplr") {
+    if (currentWallet === 'keplr') {
       wallet = new Keplr() as Wallet;
-    } else if (currentWallet === "metamask") {
+    } else if (currentWallet === 'metamask') {
       wallet = new Metamask() as Wallet;
     }
 
@@ -67,7 +63,7 @@ export class NomicClient implements NomicClientInterface {
   }
 
   disconnectWallet() {
-    localStorage.setItem("nomic/wallet", null);
+    localStorage.setItem('nomic/wallet', null);
     this.wallet = null;
     this.clearUserState();
   }
@@ -85,33 +81,31 @@ export class NomicClient implements NomicClientInterface {
 
   public get unbondingValidators(): UnbondingValidator[] {
     return this.delegations.reduce((unbondingValidators, delegation) => {
-        const validator = this.validators.find((validator) => validator.address === delegation.address);
-        if (delegation.unbonding.length > 0) {
+      const validator = this.validators.find((validator) => validator.address === delegation.address);
+      if (delegation.unbonding.length > 0) {
         unbondingValidators.push({
-            ...validator,
-            unbondInfo: delegation.unbonding,
+          ...validator,
+          unbondInfo: delegation.unbonding
         });
-        }
-        return unbondingValidators;
+      }
+      return unbondingValidators;
     }, []);
   }
 
   public get stakedValidators(): StakedValidator[] | null {
     if (!this.delegations) return null;
     return this.delegations.reduce((stakedValidators, delegation) => {
-        const validator = this.validators.find((validator) => validator.address === delegation.address);
-        const pendingNomRewards =
-        delegation.liquid.find((coin) => coin.denom === 69)?.amount || null;
-        const pendingNbtcRewards =
-        delegation.liquid.find((coin) => coin.denom === 21)?.amount || null;
-        const stakedVal = {
+      const validator = this.validators.find((validator) => validator.address === delegation.address);
+      const pendingNomRewards = delegation.liquid.find((coin) => coin.denom === 69)?.amount || null;
+      const pendingNbtcRewards = delegation.liquid.find((coin) => coin.denom === 21)?.amount || null;
+      const stakedVal = {
         ...validator,
         pendingNbtcRewards,
         pendingNomRewards,
-        amountStaked: delegation.staked,
-        };
-        stakedValidators.push(stakedVal);
-        return stakedValidators;
+        amountStaked: delegation.staked
+      };
+      stakedValidators.push(stakedVal);
+      return stakedValidators;
     }, []);
   }
 
@@ -128,9 +122,7 @@ export class NomicClient implements NomicClientInterface {
     this.nomBalance = await this.nomic.balance(address);
     this.nomRewardBalance = await this.nomic.nomRewardBalance(address);
     this.nbtcRewardBalance = await this.nomic.nbtcRewardBalance(address);
-    this.incomingIbcNbtcBalance = await this.nomic.incomingIbcNbtcBalance(
-      address
-    );
+    this.incomingIbcNbtcBalance = await this.nomic.incomingIbcNbtcBalance(address);
     this.nbtcBalance = await this.nomic.nbtcBalance(address);
 
     this.getRewardBalances();
@@ -175,33 +167,23 @@ export class NomicClient implements NomicClientInterface {
     if (!this.wallet) {
       return Promise.resolve(null);
     }
-    this.nomRewardBalance = await this.nomic.nomRewardBalance(
-      this.wallet.address
-    );
+    this.nomRewardBalance = await this.nomic.nomRewardBalance(this.wallet.address);
     return this.nomRewardBalance;
   }
 
   private async getNbtcRewardBalance() {
-    this.nbtcRewardBalance = await this.nomic.nbtcRewardBalance(
-      this.wallet.address
-    );
+    this.nbtcRewardBalance = await this.nomic.nbtcRewardBalance(this.wallet.address);
     return this.nbtcRewardBalance;
   }
 
   private async getIncomingIbcNbtcBalance() {
-    this.incomingIbcNbtcBalance = await this.nomic.incomingIbcNbtcBalance(
-      this.wallet.address
-    );
+    this.incomingIbcNbtcBalance = await this.nomic.incomingIbcNbtcBalance(this.wallet.address);
     return this.incomingIbcNbtcBalance;
   }
 
   public async getRewardBalances() {
-    this.airdropBalances = await this.nomic.airdropBalances(
-      this.wallet.address
-    );
-    this.incentiveBalances = await this.nomic.incentiveBalances(
-      this.wallet.address
-    );
+    this.airdropBalances = await this.nomic.airdropBalances(this.wallet.address);
+    this.incentiveBalances = await this.nomic.incentiveBalances(this.wallet.address);
   }
 
   async getNoLogValidators() {
@@ -211,46 +193,25 @@ export class NomicClient implements NomicClientInterface {
   public async refreshNonce() {
     const nonce = await this.nomic.nonce(this.wallet.address);
 
-    window.localStorage.setItem(
-      "orga/nonce",
-      (nonce.valueOf() + 1n).toString()
-    );
+    window.localStorage.setItem('orga/nonce', (nonce.valueOf() + 1n).toString());
   }
 
   public async claimStakingRewards() {
     const data = await this.nomic.claim(this.wallet.address);
     await this.wallet.sign(data);
-    await Promise.all([
-      this.getBalance(),
-      this.getNbtcBalance(),
-      this.getNomRewardBalance(),
-      this.getNbtcRewardBalance(),
-      this.getValidators(),
-    ]);
+    await Promise.all([this.getBalance(), this.getNbtcBalance(), this.getNomRewardBalance(), this.getNbtcRewardBalance(), this.getValidators()]);
   }
 
   public async claimAirdrop1() {
     const data = await this.nomic.claimAirdrop1(this.wallet.address);
     await this.wallet.sign(data);
-    await Promise.all([
-      this.getBalance(),
-      this.getNbtcBalance(),
-      this.getNomRewardBalance(),
-      this.getNbtcRewardBalance(),
-      this.getRewardBalances(),
-    ]);
+    await Promise.all([this.getBalance(), this.getNbtcBalance(), this.getNomRewardBalance(), this.getNbtcRewardBalance(), this.getRewardBalances()]);
   }
 
   public async claimAirdrop2() {
     const data = await this.nomic.claimAirdrop2(this.wallet.address);
     await this.wallet.sign(data);
-    await Promise.all([
-      this.getBalance(),
-      this.getNbtcBalance(),
-      this.getNomRewardBalance(),
-      this.getNbtcRewardBalance(),
-      this.getRewardBalances(),
-    ]);
+    await Promise.all([this.getBalance(), this.getNbtcBalance(), this.getNomRewardBalance(), this.getNbtcRewardBalance(), this.getRewardBalances()]);
   }
 
   public async claimTestnetParticipationIncentives() {
@@ -261,68 +222,57 @@ export class NomicClient implements NomicClientInterface {
 
   public async joinRewardAccounts() {
     if (!this.wallet) {
-      throw new Error("Cannot join airdrop accounts without wallet connected")
+      throw new Error('Cannot join airdrop accounts without wallet connected');
     }
     if (!(this.wallet instanceof Keplr)) {
-      throw new Error("Joining airdrop not supported through Metamask");
+      throw new Error('Joining airdrop not supported through Metamask');
     }
-    const evmosKey = await window.keplr.getKey(EvmosChain.chainId);
+    const evmosKey = await window.keplr.getKey(OraichainChain.chainId);
 
     const evmosKeyData = fromBech32(evmosKey.bech32Address).data;
-    const evmosNomicAddress = toBech32("nomic", evmosKeyData);
+    const evmosNomicAddress = toBech32('oraibtc', evmosKeyData);
     const evmosAirdropBalance = await nomic.airdropBalances(evmosNomicAddress);
     const evmosIncentiveBalances = await nomic.incentiveBalances(evmosNomicAddress);
-    const evmosAirdropClaimedState = localStorage.getItem("nomic/evmosAirdropClaimAttempted/" + this.wallet.address);
+    const evmosAirdropClaimedState = localStorage.getItem('nomic/evmosAirdropClaimAttempted/' + this.wallet.address);
 
     // this local storage key will need to change for both testnet and mainnet
     const balanceEligible = evmosAirdropBalance.total() > 0n || evmosIncentiveBalances.total() > 0n;
-    if (!balanceEligible
-        && evmosAirdropClaimedState !== EvmosAirdropState.MOVED) {
-      localStorage.setItem("nomic/evmosAirdropClaimAttempted/" + this.wallet.address, EvmosAirdropState.INELIGIBLE);
+    if (!balanceEligible && evmosAirdropClaimedState !== EvmosAirdropState.MOVED) {
+      localStorage.setItem('nomic/evmosAirdropClaimAttempted/' + this.wallet.address, EvmosAirdropState.INELIGIBLE);
       return;
     }
 
-    const data = await this.nomic.joinRewardAccounts(
-      evmosNomicAddress,
-      this.wallet.address
-    );
+    const data = await this.nomic.joinRewardAccounts(evmosNomicAddress, this.wallet.address);
 
-    const sig = await window.keplr.signEthereum(EvmosChain.chainId, evmosKey.bech32Address, data, EthSignType.MESSAGE);
-    const ecdSig = fromRpcSig("0x" + Buffer.from(sig).toString("hex"));
+    const sig = await window.keplr.signEthereum(OraichainChain.chainId, evmosKey.bech32Address, data, EthSignType.MESSAGE);
+    const ecdSig = fromRpcSig('0x' + Buffer.from(sig).toString('hex'));
 
     const tx = makeStdTx(JSON.parse(data), {
       pub_key: {
-        type: "tendermint/PubKeySecp256k1",
-        value: Buffer.from(evmosKey.pubKey).toString("base64"),
+        type: 'tendermint/PubKeySecp256k1',
+        value: Buffer.from(evmosKey.pubKey).toString('base64')
       },
-      signature: Buffer.concat([ecdSig.r, ecdSig.s]).toString("base64")
+      signature: Buffer.concat([ecdSig.r, ecdSig.s]).toString('base64')
     });
 
-    tx.signatures[0]["type"] = "eth";
+    tx.signatures[0]['type'] = 'eth';
     const res = await Wallet.broadcast(tx);
 
     if (res.checkTx.code !== 0) {
-      throw new Error("Failed to connect Evmos account. Try again later.");
+      throw new Error('Failed to connect Evmos account. Try again later.');
     }
 
-    localStorage.setItem("nomic/evmosAirdropClaimAttempted/" + this.wallet.address, EvmosAirdropState.MOVED);
+    localStorage.setItem('nomic/evmosAirdropClaimAttempted/' + this.wallet.address, EvmosAirdropState.MOVED);
   }
 
   public async claimIncomingIbc() {
     const data = await this.nomic.claimIncomingIbcBtc(this.wallet.address);
     await this.wallet.sign(data);
-    await Promise.all([
-      this.getNbtcBalance(),
-      this.getIncomingIbcNbtcBalance(),
-    ]);
+    await Promise.all([this.getNbtcBalance(), this.getIncomingIbcNbtcBalance()]);
   }
 
   public async delegate(validatorAddress: string, uNom: bigint) {
-    const data = await this.nomic.delegate(
-      this.wallet.address,
-      validatorAddress,
-      uNom
-    );
+    const data = await this.nomic.delegate(this.wallet.address, validatorAddress, uNom);
     await this.wallet.sign(data);
 
     await Promise.all([this.getBalance(), this.getValidators()]);
@@ -335,33 +285,14 @@ export class NomicClient implements NomicClientInterface {
   }
 
   public async redelegate(from: string, to: string, uNom: bigint) {
-    const data = await this.nomic.redelegate(
-      this.wallet.address,
-      from,
-      to,
-      uNom
-    );
+    const data = await this.nomic.redelegate(this.wallet.address, from, to, uNom);
     await this.wallet.sign(data);
     await Promise.all([this.getBalance(), this.getValidators()]);
   }
 
-  public async ibcTransferOut(
-    amount: bigint,
-    denom: string,
-    destinationAddress: string,
-    channelId: string,
-    portId: string,
-  ): Promise<void> {
+  public async ibcTransferOut(amount: bigint, denom: string, destinationAddress: string, channelId: string, portId: string): Promise<void> {
     const timeout_timestamp = Date.now() + 60 * 60 * 1000;
-    const data = await this.nomic.ibcTransferOut(
-      amount,
-      channelId,
-      portId,
-      denom,
-      this.wallet.address,
-      destinationAddress,
-      BigInt(timeout_timestamp * 1e6).toString()
-    );
+    const data = await this.nomic.ibcTransferOut(amount, channelId, portId, denom, this.wallet.address, destinationAddress, BigInt(timeout_timestamp * 1e6).toString());
     await this.wallet.sign(data);
     await Promise.all([this.getNbtcBalance()]);
   }
@@ -371,43 +302,36 @@ export class NomicClient implements NomicClientInterface {
 
     const offlineSigner = window.getOfflineSigner(senderChain.chainId);
 
-    const cosmJS = await SigningStargateClient.connectWithSigner(
-      senderChain.rpcEndpoint,
-      offlineSigner,
-      {
-        gasPrice: new GasPrice(
-          Decimal.fromUserInput((2500).toString(), 6),
-          "ukuji"
-        ),
-      }
-    );
+    const cosmJS = await SigningStargateClient.connectWithSigner(senderChain.rpcEndpoint, offlineSigner, {
+      gasPrice: new GasPrice(Decimal.fromUserInput((2500).toString(), 6), 'ukuji')
+    });
 
     const chainInfo = await window.keplr.getKey(senderChain.chainId);
     const sourceAddr = chainInfo.bech32Address;
 
     const timeoutTimestampSeconds = Math.floor((Date.now() + 60 * 60 * 1000) / 1000);
-    const timeoutTimestampNanoseconds = Long.fromNumber(timeoutTimestampSeconds).multiply(1000000000)
+    const timeoutTimestampNanoseconds = Long.fromNumber(timeoutTimestampSeconds).multiply(1000000000);
 
     const transferMsg = {
-        typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
-        value: {
-            sourcePort: senderChain.source.port,
-            sourceChannel: senderChain.source.channelId,
-            sender: sourceAddr,
-            receiver: destinationAddress,
-            token: {
-              amount: amount.toString(),
-              denom: senderChain.source.nBtcIbcDenom,
-            },
-            timeoutTimestamp: timeoutTimestampNanoseconds,
-            memo: "memo"
+      typeUrl: '/ibc.applications.transfer.v1.MsgTransfer',
+      value: {
+        sourcePort: senderChain.source.port,
+        sourceChannel: senderChain.source.channelId,
+        sender: sourceAddr,
+        receiver: destinationAddress,
+        token: {
+          amount: amount.toString(),
+          denom: senderChain.source.nBtcIbcDenom
         },
+        timeoutTimestamp: timeoutTimestampNanoseconds,
+        memo: 'memo'
+      }
     } as MsgTransferEncodeObject;
     await cosmJS.signAndBroadcast(sourceAddr, [transferMsg], 212);
   }
 
   async getChainBalance(chain: IbcChain) {
-    if (chain === NomicChain) {
+    if (chain === OraiBtcSubnetChain) {
       return this.nbtcBalance;
     }
     if (!(this.wallet instanceof Keplr)) {
@@ -418,10 +342,7 @@ export class NomicClient implements NomicClientInterface {
       const chainInfo = await window.keplr.getKey(chain.chainId);
       const sourceAddr = chainInfo.bech32Address;
 
-      const balance = await cosmJS.getBalance(
-        sourceAddr,
-        chain.source.nBtcIbcDenom
-      );
+      const balance = await cosmJS.getBalance(sourceAddr, chain.source.nBtcIbcDenom);
       cosmJS.disconnect();
       return BigInt(balance.amount);
     } catch (e) {
@@ -429,28 +350,16 @@ export class NomicClient implements NomicClientInterface {
     }
   }
   public async refreshState() {
-    await Promise.all([
-      this.getValidators(),
-      this.getBalance(),
-      this.getNomRewardBalance(),
-      this.getNbtcRewardBalance(),
-      this.getRewardBalances(),
-      this.getNbtcBalance(),
-    ]);
+    await Promise.all([this.getValidators(), this.getBalance(), this.getNomRewardBalance(), this.getNbtcRewardBalance(), this.getRewardBalances(), this.getNbtcBalance()]);
   }
 
   public async generateAddress() {
-    if (!this.wallet?.address) { return; }
+    if (!this.wallet?.address) {
+      return;
+    }
 
-    const btcAddress = await this.nomic.generateDepositAddress(
-      this.wallet.address
-    );
-    await this.nomic.broadcastDepositAddress(
-      this.wallet.address,
-      btcAddress.sigsetIndex,
-      [config.relayerUrl],
-      btcAddress.address
-    ); // (make sure this succeeds before showing the btc address to the user)
+    const btcAddress = await this.nomic.generateDepositAddress(this.wallet.address);
+    await this.nomic.broadcastDepositAddress(this.wallet.address, btcAddress.sigsetIndex, [config.relayerUrl], btcAddress.address); // (make sure this succeeds before showing the btc address to the user)
     this.depositAddress = btcAddress;
   }
 
@@ -459,9 +368,7 @@ export class NomicClient implements NomicClientInterface {
     await this.wallet.sign(data);
   }
 
-  public getValidator(
-    address: string
-  ): Validator | StakedValidator | undefined {
+  public getValidator(address: string): Validator | StakedValidator | undefined {
     const validator = this.validators.find((validator) => validator.address === address);
     const stakedValidator = this.stakedValidators.find((validator) => validator.address === address);
     return stakedValidator ? stakedValidator : validator;
@@ -481,9 +388,10 @@ export class NomicClient implements NomicClientInterface {
 
   public async init() {
     if (!this.initialized) {
-      localStorage.setItem("orga/chainid", config.chainId.toString());
-      localStorage.setItem("nomic/rest_server", config.restUrl);
-      await init();
+      localStorage.setItem('orga/chainid', config.chainId.toString());
+      localStorage.setItem('nomic/rest_server', config.restUrl);
+      // @ts-ignore
+      window.Nomic = await init();
       this.initialized = true;
     }
   }

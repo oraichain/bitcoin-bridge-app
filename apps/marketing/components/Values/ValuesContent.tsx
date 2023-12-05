@@ -1,6 +1,6 @@
-import Bridge from "../../public/bridge.svg";
-import More from "../../public/more.svg";
-import Image from "next/image";
+import Bridge from '../../public/bridge.svg';
+import More from '../../public/more.svg';
+import Image from 'next/image';
 
 export const ValuesContent = () => {
   return (
@@ -12,25 +12,20 @@ export const ValuesContent = () => {
       </div>
       <div className="md:w-1/2">
         <div className="flex flex-col text-left gap-4">
-          <h2 className="text-transparent text-sm bg-clip-text bg-gradient-20 from-gradientStart to-gradientStop">
-            THE BRIDGE
-          </h2>
+          <h2 className="text-transparent text-sm bg-clip-text bg-gradient-20 from-gradientStart to-gradientStop">THE BRIDGE</h2>
           <h1 className="text-3xl md:text-5xl font-extralight">
             What is
-            <span className="font-medium"> Nomic? </span>
+            <span className="font-medium"> OraiBtcSubnet? </span>
           </h1>
           <div className="text-textSecondary font-extralight text-lg">
             <p>
-              <b>Nomic</b> is a layer-1 blockchain which offers a decentralized,
-              non-custodial Bitcoin bridge.
+              <b>OraiBtcSubnet</b> is a layer-1 blockchain which offers a decentralized, non-custodial Bitcoin bridge.
             </p>
             <p>
-              <b>nBTC</b> is a token that represents 1:1 ownership of Bitcoin in
-              an IBC-compatible token.
+              <b>oBTC</b> is a token that represents 1:1 ownership of Bitcoin in an IBC-compatible token.
             </p>
             <p>
-              <b>NOM</b> is a token used for securing the network which can be
-              staked to earn Bitcoin rewards.
+              <b>oraibtc</b> is a token used for securing the network which can be staked to earn Bitcoin rewards.
             </p>
           </div>
           <div className="flex flex-row font-light gap-2 text-lg items-center">

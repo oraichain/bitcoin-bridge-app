@@ -1,6 +1,6 @@
 import { UnbondInfo } from "./unbond-info";
 import { Nomic } from "./nomic";
-import { Coin } from "nomic-wasm-dev";
+import { Coin } from "@oraichain/oraibtc-wasm";
 
 export interface Delegation {
   address: string;

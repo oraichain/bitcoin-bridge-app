@@ -1,9 +1,9 @@
-import { useContext } from "react";
-import { NomicContext } from "../../../contexts/NomicContext";
-import { ValidatorLogo } from "../ValidatorLogo";
-import { observer } from "mobx-react-lite";
-import { displayNom, updateUrlQueryParams } from "@nomic-ui/utils";
-import { useRouter } from "next/router";
+import { useContext } from 'react';
+import { NomicContext } from '../../../contexts/NomicContext';
+import { ValidatorLogo } from '../ValidatorLogo';
+import { observer } from 'mobx-react-lite';
+import { displayNom, updateUrlQueryParams } from '@nomic-ui/utils';
+import { useRouter } from 'next/router';
 
 const unbondingHours = 14 * 24;
 
@@ -36,33 +36,33 @@ const getRemaining = (start: bigint) => {
     days: days,
     hours: hours,
     minutes: minutes,
-    unbondEnd: unbondEnd,
+    unbondEnd: unbondEnd
   };
 };
 
 const timeString = (start: bigint) => {
   const remaining = getRemaining(start);
-  let timeString = "";
+  let timeString = '';
   if (remaining.days > 0) {
-    timeString += remaining.days + " Day";
+    timeString += remaining.days + ' Day';
     if (remaining.days != 1) {
-      timeString += "s ";
+      timeString += 's ';
     } else {
-      timeString += " ";
+      timeString += ' ';
     }
   } else if (remaining.hours > 0) {
-    timeString += remaining.hours + " Hour";
+    timeString += remaining.hours + ' Hour';
     if (remaining.hours != 1) {
-      timeString += "s ";
+      timeString += 's ';
     } else {
-      timeString += " ";
+      timeString += ' ';
     }
   } else if (remaining.minutes > 0) {
-    timeString += remaining.minutes + " Minute";
+    timeString += remaining.minutes + ' Minute';
     if (remaining.minutes != 1) {
-      timeString += "s ";
+      timeString += 's ';
     } else {
-      timeString += " ";
+      timeString += ' ';
     }
   }
   return timeString;
@@ -70,8 +70,7 @@ const timeString = (start: bigint) => {
 
 const getProgress = (start: bigint): number => {
   const remaining = getRemaining(start);
-  const minutesLeft =
-    remaining.days * 24 * 60 + remaining.hours * 60 + remaining.minutes;
+  const minutesLeft = remaining.days * 24 * 60 + remaining.hours * 60 + remaining.minutes;
   const progress = 100 - (minutesLeft / (unbondingHours * 60)) * 100;
 
   if (progress > 100) {
@@ -102,22 +101,13 @@ export const UnbondingValidatorList = observer(() => {
             <table className="min-w-full divide-y divide-surfaceDark">
               <thead className="bg-surfaceDark">
                 <tr className="shadow-inner text-textTertiary">
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-                  >
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                     Name
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-                  >
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                     Amount Undelegating
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-                  >
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                     Unbonding Period Remaining
                   </th>
                 </tr>
@@ -132,43 +122,28 @@ export const UnbondingValidatorList = observer(() => {
                       <tr
                         key={validator.address + unbonding.startSeconds}
                         onClick={() => {
-                          updateUrlQueryParams(
-                            router,
-                            { key: "validator", value: validator.address },
-                            { key: "modal", value: "info" }
-                          );
+                          updateUrlQueryParams(router, { key: 'validator', value: validator.address }, { key: 'modal', value: 'info' });
                         }}
                       >
                         <td className="px-6 py-4 whitespace-nowrap text-center">
                           <div className="flex items-center text-center">
                             <ValidatorLogo validator={validator} />
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-textPrimary">
-                                {validator.info.moniker.length > 20
-                                  ? validator.info.moniker.slice(0, 20) + "..."
-                                  : validator.info.moniker}
-                              </div>
+                              <div className="text-sm font-medium text-textPrimary">{validator.info.moniker.length > 20 ? validator.info.moniker.slice(0, 20) + '...' : validator.info.moniker}</div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-regular text-textPrimary text-left">
-                            {displayNom(unbonding.amount) + " NOM"}
-                          </div>
+                          <div className="text-sm font-regular text-textPrimary text-left">{displayNom(unbonding.amount) + ' oraibtc'}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div>
-                            <div className="text-xs font-regular text-textPrimary">
-                              {timeString(BigInt(unbonding.startSeconds))}
-                            </div>
+                            <div className="text-xs font-regular text-textPrimary">{timeString(BigInt(unbonding.startSeconds))}</div>
                             <div className="w-full rounded-full bg-surfaceDark shadow-inner h-2">
                               <div
                                 className="bg-primary h-2 rounded-full"
                                 style={{
-                                  width:
-                                    getProgress(
-                                      BigInt(unbonding.startSeconds)
-                                    ).toString() + "%",
+                                  width: getProgress(BigInt(unbonding.startSeconds)).toString() + '%'
                                 }}
                               ></div>
                             </div>

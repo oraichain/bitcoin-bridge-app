@@ -1,14 +1,14 @@
-import { AppProps } from "next/app";
-import Head from "next/head";
-import "./styles.css";
-import { useContext, useEffect } from "react";
-import { NomicContext } from "../contexts/NomicContext";
-import { AppLayout } from "../layouts/AppLayout";
-import { configure } from "mobx";
-import { BitcoinContext } from "../contexts/BitcoinContext";
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import './styles.css';
+import { useContext, useEffect } from 'react';
+import { NomicContext } from '../contexts/NomicContext';
+import { AppLayout } from '../layouts/AppLayout';
+import { configure } from 'mobx';
+import { BitcoinContext } from '../contexts/BitcoinContext';
 configure({
-  useProxies: "never",
-  enforceActions: "never",
+  useProxies: 'never',
+  enforceActions: 'never'
 });
 
 function CustomApp({ Component, pageProps }: AppProps) {
@@ -32,7 +32,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Nomic Bitcoin Bridge</title>
+        <title>Oraichain Bitcoin Subnet Bridge</title>
       </Head>
       <div suppressHydrationWarning className="h-screen">
         <AppLayout>

@@ -1,1 +1,1 @@
-export type Nomic = typeof import("nomic-wasm-dev");
+export type Nomic = typeof import('@oraichain/oraibtc-wasm');

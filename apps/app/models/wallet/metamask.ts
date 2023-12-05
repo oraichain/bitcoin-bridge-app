@@ -1,12 +1,12 @@
 import { Wallet } from "./wallet";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { IbcChain } from "../ibc-chain";
-import init, * as nomic from "nomic-wasm-dev";
+import init, * as nomic from "@oraichain/oraibtc-wasm";
 import { makeStdTx } from "@cosmjs/amino";
 import { fromRpcSig, ecrecover, hashPersonalMessage } from "@ethereumjs/util";
 import secp256k1 from "secp256k1";
 
-declare type Nomic = typeof import("nomic-wasm-dev");
+declare type Nomic = typeof import("@oraichain/oraibtc-wasm");
 
 export class Metamask implements Wallet {
   address?: string;
@@ -14,7 +14,7 @@ export class Metamask implements Wallet {
   connected = false;
   name? = "Metamask";
   logo = "/metamask.svg";
-  queryableBalances = ["Nomic"];
+  queryableBalances = ["OraiBtcSubnet"];
 
   async isPresent() {
     const ethereumProvider = await detectEthereumProvider();

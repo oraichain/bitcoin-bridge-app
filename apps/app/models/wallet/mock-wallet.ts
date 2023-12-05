@@ -1,19 +1,18 @@
 import { Wallet } from "./wallet";
-import { IbcChain } from "../ibc-chain";
 
 export class MockWallet implements Wallet {
   address?: string;
   connected = false;
   name?: string;
   logo = "/keplr.svg";
-  queryableBalances = ["Nomic"]
+  queryableBalances = ["OraiBtcSubnet"]
 
   async isPresent() {
       return true;
   }
 
   async connect() {
-    this.address = "nomicmock12345667890";
+    this.address = "oraibtcmock12345667890";
     this.name = "usability tester";
     this.connected = true;
   }

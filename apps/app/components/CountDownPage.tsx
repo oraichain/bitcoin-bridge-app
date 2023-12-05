@@ -13,7 +13,7 @@ export const CountDownPage = ({ endDate }: Props) => {
     <div className="grid place-items-center h-full w-full">
       <div className="flex flex-col gap-12 items-center">
         <div className="flex items-center mr-8 mt-4">
-          <Image src={Logo} alt="Nomic" />
+          <Image src={Logo} alt="OraiBtcSubnet" />
         </div>
         <h1 className="text-textPrimary text-9xl font-semibold">
           {(hours < 10 ? "0" + hours : hours.toString()) +

@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import FeaturePoint from "./FeaturePoint";
-import Sheild from "../../public/icons/security.svg";
-import Card from "../../public/icons/performance.svg";
-import Eye from "../../public/icons/specialized.svg";
-import HorizontalDots from "./HorizontalDots";
-import VerticalDots from "./VerticalDots";
-import Image from "next/image";
+import { useEffect, useRef, useState } from 'react';
+import FeaturePoint from './FeaturePoint';
+import Sheild from '../../public/icons/security.svg';
+import Card from '../../public/icons/performance.svg';
+import Eye from '../../public/icons/specialized.svg';
+import HorizontalDots from './HorizontalDots';
+import VerticalDots from './VerticalDots';
+import Image from 'next/image';
 
 export default function TimelineLarge() {
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -48,9 +48,9 @@ export default function TimelineLarge() {
   useEffect(() => {
     setTimeout(() => handleResize(), 5);
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
@@ -63,18 +63,15 @@ export default function TimelineLarge() {
           <div className="flex flex-row mx-6 md:mx-12 lg:mx-24">
             <div className="w-1/2">
               <div ref={dotContainerRef} className="mr-5">
-                <HorizontalDots
-                  numDots={horizontalDots}
-                  className={"justify-end"}
-                />
+                <HorizontalDots numDots={horizontalDots} className={'justify-end'} />
               </div>
               <div className="pr-24 mt-12">
                 <FeaturePoint
                   icon={<Image src={Sheild} alt="Sheild" />}
-                  headerLine0={"The most"}
-                  headerLine1={"secure bridge"}
+                  headerLine0={'The most'}
+                  headerLine1={'secure bridge'}
                   bodyText={
-                    "Our mechanism has been carefully designed to be secure in ways where other bridges fall short. Nomic's Bitcoin reserve makes use of Taproot and Schnorr signatures as well as innovative security features to make nBTC the safest Bitcoin bridge asset."
+                    "Our mechanism has been carefully designed to be secure in ways where other bridges fall short. Nomic's Bitcoin reserve makes use of Taproot and Schnorr signatures as well as innovative security features to make oBTC the safest Bitcoin bridge asset."
                   }
                 />
               </div>
@@ -90,11 +87,9 @@ export default function TimelineLarge() {
               <div className="pl-24 mt-12">
                 <FeaturePoint
                   icon={<Image src={Eye} alt="Eye" />}
-                  headerLine0={"Built by a"}
-                  headerLine1={"strong team"}
-                  bodyText={
-                    "The Nomic contributors have deep expertise with both Bitcoin and Cosmos, serving as early Cosmos engineers and working with Bitcoin since 2011."
-                  }
+                  headerLine0={'Built by a'}
+                  headerLine1={'strong team'}
+                  bodyText={'The Nomic contributors have deep expertise with both Bitcoin and Cosmos, serving as early Cosmos engineers and working with Bitcoin since 2011.'}
                 />
               </div>
             </div>

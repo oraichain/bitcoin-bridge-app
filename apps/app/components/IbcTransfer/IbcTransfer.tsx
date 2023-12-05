@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { NomicContext } from "../../contexts/NomicContext";
-import { Card } from "@nomic-ui/components";
-import { SwapInterface } from "./SwapInterface";
-import { IncomingIbcHeader } from "./IncomingIbcHeader";
-import { Chains, KujiraChain, NomicChain } from "../../models/ibc-chain";
-import { Metamask } from "../../models/wallet/metamask";
-import { observer } from "mobx-react-lite";
+import { useContext, useEffect, useState } from 'react';
+import { NomicContext } from '../../contexts/NomicContext';
+import { Card } from '@nomic-ui/components';
+import { SwapInterface } from './SwapInterface';
+import { IncomingIbcHeader } from './IncomingIbcHeader';
+import { Chains, OraichainChain, OraiBtcSubnetChain } from '../../models/ibc-chain';
+import { Metamask } from '../../models/wallet/metamask';
+import { observer } from 'mobx-react-lite';
 
 export const IbcTransfer = observer(() => {
   const nomic = useContext(NomicContext);
@@ -18,7 +18,7 @@ export const IbcTransfer = observer(() => {
   async function updateBalances() {
     setChainBalances({
       [sourceChain.chainId]: await nomic.getChainBalance(sourceChain),
-      [destinationChain.chainId]: await nomic.getChainBalance(destinationChain),
+      [destinationChain.chainId]: await nomic.getChainBalance(destinationChain)
     });
   }
 
@@ -29,7 +29,7 @@ export const IbcTransfer = observer(() => {
   };
 
   useEffect(() => {
-    if (nomic.wallet instanceof Metamask && sourceChain.name !== "Nomic") {
+    if (nomic.wallet instanceof Metamask && sourceChain.name !== 'OraiBtcSubnet') {
       swapChains();
     }
     updateBalances();
@@ -40,13 +40,7 @@ export const IbcTransfer = observer(() => {
       <div className="min-w-128 flex flex-col justify-center gap-4">
         <IncomingIbcHeader updateBalances={updateBalances} />
         <Card className="w-full">
-          <SwapInterface
-            chainBalances={chainBalances}
-            sourceChain={sourceChain}
-            destinationChain={destinationChain}
-            updateBalances={updateBalances}
-            swapChains={swapChains}
-          />
+          <SwapInterface chainBalances={chainBalances} sourceChain={sourceChain} destinationChain={destinationChain} updateBalances={updateBalances} swapChains={swapChains} />
         </Card>
       </div>
     </div>

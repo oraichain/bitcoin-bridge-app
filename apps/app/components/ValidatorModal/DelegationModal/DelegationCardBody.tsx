@@ -1,17 +1,15 @@
-import { useContext } from "react";
-import { NomicContext } from "../../../contexts/NomicContext";
-import { displayNom, getUrlQueryParam } from "@nomic-ui/utils";
-import { useRouter } from "next/router";
-import { StakedValidator } from "../../../models/staked-validator";
+import { useContext } from 'react';
+import { NomicContext } from '../../../contexts/NomicContext';
+import { displayNom, getUrlQueryParam } from '@nomic-ui/utils';
+import { useRouter } from 'next/router';
+import { StakedValidator } from '../../../models/staked-validator';
 
 export const DelegationCardBody = () => {
   const nomic = useContext(NomicContext);
   const router = useRouter();
 
-  const selectedValidatorAddress = getUrlQueryParam(router, "validator");
-  const selectedValidator = nomic.getValidator(
-    selectedValidatorAddress
-  ) as StakedValidator;
+  const selectedValidatorAddress = getUrlQueryParam(router, 'validator');
+  const selectedValidator = nomic.getValidator(selectedValidatorAddress) as StakedValidator;
 
   return (
     <div>
@@ -39,26 +37,14 @@ export const DelegationCardBody = () => {
       <ul role="list" className="flex flex-col gap-4 py-4">
         <li key="0" className="">
           <div className="flex flex-col gap-1">
-            <h3 className="uppercase text-transparent text-xs font-medium bg-clip-text bg-gradient-20 from-gradientStart to-gradientStop">
-              Current Delegation
-            </h3>
-            <h1 className="text-lg text-textPrimary font-semibold">
-              {!nomic.wallet ||
-              !selectedValidator ||
-              !selectedValidator.amountStaked
-                ? displayNom(0n, true)
-                : displayNom(selectedValidator.amountStaked, true)}
-            </h1>
+            <h3 className="uppercase text-transparent text-xs font-medium bg-clip-text bg-gradient-20 from-gradientStart to-gradientStop">Current Delegation</h3>
+            <h1 className="text-lg text-textPrimary font-semibold">{!nomic.wallet || !selectedValidator || !selectedValidator.amountStaked ? displayNom(0n, true) : displayNom(selectedValidator.amountStaked, true)}</h1>
           </div>
         </li>
         <li key="1" className="">
           <div className="flex flex-col gap-1 justify-center">
-            <h3 className="uppercase text-transparent text-xs font-medium bg-clip-text bg-gradient-20 from-gradientStart to-gradientStop">
-              Available Balance
-            </h3>
-            <h1 className="text-lg text-textPrimary font-semibold">
-              {displayNom(nomic.nomBalance) + " NOM"}
-            </h1>
+            <h3 className="uppercase text-transparent text-xs font-medium bg-clip-text bg-gradient-20 from-gradientStart to-gradientStop">Available Balance</h3>
+            <h1 className="text-lg text-textPrimary font-semibold">{displayNom(nomic.nomBalance) + ' oraibtc'}</h1>
           </div>
         </li>
       </ul>

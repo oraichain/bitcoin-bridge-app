@@ -1,16 +1,16 @@
-import { Key } from "@keplr-wallet/types";
-import { Wallet } from "./wallet";
-import { config } from "../../config";
-import { ChainInfo, IbcChain, NomicChain } from "../ibc-chain";
-import { SigningStargateClient } from "@cosmjs/stargate";
-import { makeStdTx } from "@cosmjs/amino";
+import { Key } from '@keplr-wallet/types';
+import { Wallet } from './wallet';
+import { config } from '../../config';
+import { ChainInfo, OraiBtcSubnetChain } from '../ibc-chain';
+import { SigningStargateClient } from '@cosmjs/stargate';
+import { makeStdTx } from '@cosmjs/amino';
 
 export class Keplr implements Wallet {
   address?: string;
   connected = false;
   name?: string;
-  logo = "/keplr.svg";
-  queryableBalances = ["Nomic", "Evmos", "Kujira Testnet", "Notmic"];
+  logo = '/keplr.svg';
+  queryableBalances = ['Oraichain', 'OraiBtcSubnet'];
 
   key?: Key;
 
@@ -21,7 +21,7 @@ export class Keplr implements Wallet {
   async connect() {
     await this.suggestChain();
     await window.keplr.enable(config.chainId);
-    localStorage.setItem("nomic/wallet", "keplr");
+    localStorage.setItem('nomic/wallet', 'keplr');
     const key = await window.keplr.getKey(config.chainId);
     this.address = key.bech32Address;
     this.name = key.name;
@@ -46,14 +46,9 @@ export class Keplr implements Wallet {
   }
 
   async provideSigner(chain: ChainInfo) {
-    const offlineSigner = await window.keplr.getOfflineSigner(
-      NomicChain.chainId
-    );
+    const offlineSigner = await window.keplr.getOfflineSigner(OraiBtcSubnetChain.chainId);
     try {
-      const cosmJs = await SigningStargateClient.connectWithSigner(
-        chain.rpcEndpoint,
-        offlineSigner
-      );
+      const cosmJs = await SigningStargateClient.connectWithSigner(chain.rpcEndpoint, offlineSigner);
       return cosmJs;
     } catch (e) {
       console.error(e);
@@ -61,50 +56,49 @@ export class Keplr implements Wallet {
   }
 
   async suggestChain() {
-    // await window.keplr.experimentalSuggestChain({
-    //   chainId: "notmic",
-    //   chainName: "Notmic",
-    //   rpc: "http://10.16.57.192:26667",
-    //   rest: "http://10.16.57.192:1317",
-    //   bip44: {
-    //     coinType: 118,
-    //   },
-    //   bech32Config: {
-    //     bech32PrefixAccAddr: "cosmos",
-    //     bech32PrefixAccPub: "cosmos" + "pub",
-    //     bech32PrefixValAddr: "cosmos" + "valoper",
-    //     bech32PrefixValPub: "cosmos" + "valoperpub",
-    //     bech32PrefixConsAddr: "cosmos" + "valcons",
-    //     bech32PrefixConsPub: "cosmos" + "valconspub",
-    //   },
-    //   currencies: [
-    //     {
-    //       coinDenom: "STAKE",
-    //       coinMinimalDenom: "stake",
-    //       coinDecimals: 6,
-    //     },
-    //   ],
-    //   feeCurrencies: [
-    //     {
-    //       coinDenom: "STAKE",
-    //       coinMinimalDenom: "stake",
-    //       coinDecimals: 6,
-    //       gasPriceStep: {
-    //         low: 0,
-    //         average: 0,
-    //         high: 0,
-    //       },
-    //     },
-    //   ],
-    //   stakeCurrency: {
-    //     coinDenom: "STAKE",
-    //     coinMinimalDenom: "stake",
-    //     coinDecimals: 6,
-    //   },
-    //   coinType: 119,
-    //   walletUrlForStaking: config.stakingUrl,
-    //   features: ["stargate"],
-    // });
+    await window.keplr.experimentalSuggestChain({
+      chainId: 'Oraichain',
+      chainName: 'Oraichain',
+      rpc: 'https://rpc.orai.io',
+      rest: 'https://lcd.orai.io',
+      bip44: {
+        coinType: 118
+      },
+      bech32Config: {
+        bech32PrefixAccAddr: 'orai',
+        bech32PrefixAccPub: 'orai' + 'pub',
+        bech32PrefixValAddr: 'orai' + 'valoper',
+        bech32PrefixValPub: 'orai' + 'valoperpub',
+        bech32PrefixConsAddr: 'orai' + 'valcons',
+        bech32PrefixConsPub: 'orai' + 'valconspub'
+      },
+      currencies: [
+        {
+          coinDenom: 'orai',
+          coinMinimalDenom: 'orai',
+          coinDecimals: 6
+        }
+      ],
+      feeCurrencies: [
+        {
+          coinDenom: 'orai',
+          coinMinimalDenom: 'orai',
+          coinDecimals: 6,
+          gasPriceStep: {
+            low: 0.003,
+            average: 0.005,
+            high: 0.007
+          }
+        }
+      ],
+      stakeCurrency: {
+        coinDenom: 'STAKE',
+        coinMinimalDenom: 'stake',
+        coinDecimals: 6
+      },
+      walletUrlForStaking: config.stakingUrl,
+      features: ['stargate']
+    });
 
     await window.keplr.experimentalSuggestChain({
       chainId: config.chainId,
@@ -112,48 +106,42 @@ export class Keplr implements Wallet {
       rpc: config.rpcUrl,
       rest: config.restUrl,
       bip44: {
-        coinType: 118,
+        coinType: 118
       },
       bech32Config: {
-        bech32PrefixAccAddr: "nomic",
-        bech32PrefixAccPub: "nomic" + "pub",
-        bech32PrefixValAddr: "nomic" + "valoper",
-        bech32PrefixValPub: "nomic" + "valoperpub",
-        bech32PrefixConsAddr: "nomic" + "valcons",
-        bech32PrefixConsPub: "nomic" + "valconspub",
+        bech32PrefixAccAddr: 'oraibtc',
+        bech32PrefixAccPub: 'oraibtc' + 'pub',
+        bech32PrefixValAddr: 'oraibtc' + 'valoper',
+        bech32PrefixValPub: 'oraibtc' + 'valoperpub',
+        bech32PrefixConsAddr: 'oraibtc' + 'valcons',
+        bech32PrefixConsPub: 'oraibtc' + 'valconspub'
       },
       currencies: [
         {
-          coinDenom: "NOM",
-          coinMinimalDenom: "unom",
-          coinDecimals: 6,
+          coinDenom: 'oraibtc',
+          coinMinimalDenom: 'uoraibtc',
+          coinDecimals: 6
         },
         {
-          coinDenom: "nBTC",
-          coinMinimalDenom: "uSAT",
-          coinDecimals: 14,
-        },
+          coinDenom: 'oBTC',
+          coinMinimalDenom: 'uoBTC',
+          coinDecimals: 14
+        }
       ],
       feeCurrencies: [
         {
-          coinDenom: "NOM",
-          coinMinimalDenom: "unom",
+          coinDenom: 'oraibtc',
+          coinMinimalDenom: 'uoraibtc',
           coinDecimals: 6,
           gasPriceStep: {
             low: 0,
             average: 0,
-            high: 0,
-          },
-        },
+            high: 0
+          }
+        }
       ],
-      stakeCurrency: {
-        coinDenom: "NOM",
-        coinMinimalDenom: "unom",
-        coinDecimals: 6,
-      },
-      coinType: 119,
-      walletUrlForStaking: config.stakingUrl,
-      features: ["stargate"],
+      stakeCurrency: { coinDenom: 'oraibtc', coinMinimalDenom: 'uoraibtc', coinDecimals: 6 },
+      features: ['stargate']
     });
   }
 }
