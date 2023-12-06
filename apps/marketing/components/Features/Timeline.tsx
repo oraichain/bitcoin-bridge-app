@@ -42,7 +42,7 @@ export default function Timeline() {
             headerLine0={'The most'}
             headerLine1={'secure bridge'}
             bodyText={
-              "Our mechanism has been carefully designed to be secure in ways where other bridges fall short. Nomic's Bitcoin reserve makes use of Taproot and Schnorr signatures as well as innovative security features to make oBTC the safest Bitcoin bridge asset."
+              "Our mechanism has been carefully designed to be secure in ways where other bridges fall short. Nomic's Bitcoin reserve makes use of Taproot and Schnorr signatures as well as innovative security features to make usat the safest Bitcoin bridge asset."
             }
           />
         </div>
