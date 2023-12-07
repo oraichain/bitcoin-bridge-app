@@ -1,6 +1,6 @@
-import { UnbondInfo } from "./unbond-info";
-import { Nomic } from "./nomic";
-import { Coin } from "@oraichain/oraibtc-wasm";
+import { UnbondInfo } from './unbond-info';
+
+import { Coin, OraiBtc } from '@oraichain/oraibtc-wasm';
 
 export interface Delegation {
   address: string;
@@ -9,9 +9,6 @@ export interface Delegation {
   unbonding: UnbondInfo[];
 }
 
-export function getDelegations(
-  nomic: Nomic,
-  address: string
-): Promise<Delegation[]> {
+export function getDelegations(nomic: OraiBtc, address: string): Promise<Delegation[]> {
   return nomic.delegations(address);
 }

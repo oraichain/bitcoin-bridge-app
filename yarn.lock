@@ -2052,10 +2052,10 @@
     yargs "^17.6.2"
     yargs-parser "21.1.1"
 
-"@oraichain/oraibtc-wasm@^0.6.4":
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/@oraichain/oraibtc-wasm/-/oraibtc-wasm-0.6.4.tgz#f38a644720412ce9e1334148c99bd9ddb1c5d707"
-  integrity sha512-oUfvQ0bGi8JbXNtafINJKG8DqF5pmrE3bn9vuQq4HtEutjum4tGEEIc8H5deCQNkpwnSLgQuGzZf6MjIZAN2hg==
+"@oraichain/oraibtc-wasm@^0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@oraichain/oraibtc-wasm/-/oraibtc-wasm-0.7.4.tgz#1391c64cc6c3265d6ff6adcfa0feca49c168d819"
+  integrity sha512-Fw54hC+nlcOKlPfYbFvYZeQaw7eBX9UtQPyDKrBHfb5ooI9MketA8rBHj13Mia/vOYINGApCkpevOc0x6Vfzpg==
 
 "@parcel/watcher@2.0.4":
   version "2.0.4"

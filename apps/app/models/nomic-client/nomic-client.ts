@@ -1,10 +1,9 @@
-import init, * as nomic from '@oraichain/oraibtc-wasm';
+import init, { OraiBtc, DepositAddress } from '@oraichain/oraibtc-wasm';
 import Long from 'long';
 import { Validator, getAllValidators } from '../validator';
 import { Delegation, getDelegations } from '../delegation';
 import { makeAutoObservable } from 'mobx';
 import { config } from '../../config';
-import { DepositAddress } from '@oraichain/oraibtc-wasm';
 import { SigningStargateClient, GasPrice, MsgTransferEncodeObject } from '@cosmjs/stargate';
 import { IbcChain, OraichainChain, OraiBtcSubnetChain } from '../ibc-chain';
 import { Decimal } from '@cosmjs/math';
@@ -21,14 +20,12 @@ import { EthSignType } from '@keplr-wallet/types';
 import { fromRpcSig } from '@ethereumjs/util';
 import { EvmosAirdropState } from '../../models/evmos-airdrop-state';
 
-declare type Nomic = typeof import('@oraichain/oraibtc-wasm');
-
 export class NomicClient implements NomicClientInterface {
   readonly modifier = BigInt(1e6);
   readonly nbtcModifier = BigInt(1e14);
 
   initialized = false;
-  private nomic: Nomic = nomic;
+  private nomic: OraiBtc;
   public nomBalance: bigint | null = null;
   public nbtcBalance: bigint | null = null;
   public nomRewardBalance: bigint | null = null;
@@ -56,7 +53,7 @@ export class NomicClient implements NomicClientInterface {
     if (currentWallet === 'keplr') {
       wallet = new Keplr() as Wallet;
     } else if (currentWallet === 'metamask') {
-      wallet = new Metamask() as Wallet;
+      wallet = new Metamask(this.nomic) as Wallet;
     }
 
     return wallet;
@@ -231,8 +228,8 @@ export class NomicClient implements NomicClientInterface {
 
     const evmosKeyData = fromBech32(evmosKey.bech32Address).data;
     const evmosNomicAddress = toBech32('oraibtc', evmosKeyData);
-    const evmosAirdropBalance = await nomic.airdropBalances(evmosNomicAddress);
-    const evmosIncentiveBalances = await nomic.incentiveBalances(evmosNomicAddress);
+    const evmosAirdropBalance = await this.nomic.airdropBalances(evmosNomicAddress);
+    const evmosIncentiveBalances = await this.nomic.incentiveBalances(evmosNomicAddress);
     const evmosAirdropClaimedState = localStorage.getItem('nomic/evmosAirdropClaimAttempted/' + this.wallet.address);
 
     // this local storage key will need to change for both testnet and mainnet
@@ -388,10 +385,8 @@ export class NomicClient implements NomicClientInterface {
 
   public async init() {
     if (!this.initialized) {
-      localStorage.setItem('orga/chainid', config.chainId.toString());
-      localStorage.setItem('nomic/rest_server', config.restUrl);
-      // @ts-ignore
-      window.Nomic = await init();
+      await init();
+      this.nomic = new OraiBtc(config.restUrl, config.chainId);
       this.initialized = true;
     }
   }

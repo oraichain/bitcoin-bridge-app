@@ -1,7 +1,7 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './styles.css';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { NomicContext } from '../contexts/NomicContext';
 import { AppLayout } from '../layouts/AppLayout';
 import { configure } from 'mobx';
@@ -14,10 +14,11 @@ configure({
 function CustomApp({ Component, pageProps }: AppProps) {
   const nomic = useContext(NomicContext);
   const bitcoin = useContext(BitcoinContext);
-
+  const [initialized, setInitialized] = useState(false);
   useEffect(() => {
     async function init() {
       await nomic.init();
+      setInitialized(true);
       const wallet = nomic.getCurrentWallet();
       if (wallet && !wallet.connected) {
         await wallet.connect();
@@ -35,9 +36,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <title>Oraichain Bitcoin Subnet Bridge</title>
       </Head>
       <div suppressHydrationWarning className="h-screen">
-        <AppLayout>
-          <Component {...pageProps} />
-        </AppLayout>
+        <AppLayout>{initialized && <Component {...pageProps} />}</AppLayout>
       </div>
     </>
   );

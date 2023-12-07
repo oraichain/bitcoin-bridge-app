@@ -10,7 +10,7 @@ const navigation = [
   {
     name: 'Staking',
     icon: HomeIcon,
-    path: 'staking'
+    path: '/staking'
   },
   {
     name: 'Bitcoin',
@@ -20,7 +20,7 @@ const navigation = [
   {
     name: 'IBC',
     icon: ArrowsRightLeftIcon,
-    path: 'ibc'
+    path: '/ibc'
   },
   {
     name: 'Rewards',
