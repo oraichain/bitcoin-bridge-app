@@ -8,7 +8,7 @@
     "start:internal": "NEXT_PUBLIC_APP_ENV=internal nx serve",
     "start:testnet": "NEXT_PUBLIC_APP_ENV=testnet nx serve",
     "build:mock": "NEXT_PUBLIC_APP_ENV=mock nx build --verbose",
-    "build:testnet": "NEXT_PUBLIC_APP_ENV=testnet next build",
+    "build:testnet": "NEXT_PUBLIC_APP_ENV=testnet nx build --verbose",
     "build:mainnet": "NEXT_PUBLIC_APP_ENV=mainnet nx build",
     "test": "nx test"
   },
