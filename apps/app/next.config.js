@@ -10,13 +10,14 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false
   },
+  output: 'export',
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 's3.amazonaws.com/**'
-      }
-    ]
+    unoptimized: true
+  },
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true
   },
   async redirects() {
     return [

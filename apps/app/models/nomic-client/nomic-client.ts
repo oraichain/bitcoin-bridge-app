@@ -53,7 +53,8 @@ export class NomicClient implements NomicClientInterface {
     if (currentWallet === 'keplr') {
       wallet = new Keplr() as Wallet;
     } else if (currentWallet === 'metamask') {
-      wallet = new Metamask(this.nomic) as Wallet;
+      wallet = new Metamask() as Wallet;
+      wallet.address = this.nomic.convertEthAddress(wallet.ethAddress);
     }
 
     return wallet;

@@ -1,7 +1,7 @@
-import { ValidatorInfo } from "./validator-info";
-import { Nomic } from "./nomic";
-import { delay, partitionFilter, sanitizeUrl } from "@nomic-ui/utils";
-import { makeAutoObservable } from "mobx";
+import { ValidatorInfo } from './validator-info';
+import { delay, partitionFilter, sanitizeUrl } from '@nomic-ui/utils';
+import { makeAutoObservable } from 'mobx';
+import { OraiBtc } from '@oraichain/oraibtc-wasm';
 
 export interface ValidatorModel {
   info: ValidatorInfo;
@@ -36,19 +36,16 @@ export class Validator implements ValidatorModel {
 }
 
 function getCachedLogo(address: string) {
-  return localStorage.getItem("nomic/validator/logo/" + address);
+  return localStorage.getItem('nomic/validator/logo/' + address);
 }
 
 async function setLogos(vals: Validator[], chunkSize = 10) {
   const [, loadableVals] = partitionFilter(vals, (val) => {
     let cachedLogo = getCachedLogo(val.address);
     if (cachedLogo) {
-      if (cachedLogo.includes("\"")) {
-        cachedLogo = cachedLogo.replace(/"/g, "");
-        localStorage.setItem(
-          "nomic/validator/logo/" + val.address,
-          cachedLogo
-        );
+      if (cachedLogo.includes('"')) {
+        cachedLogo = cachedLogo.replace(/"/g, '');
+        localStorage.setItem('nomic/validator/logo/' + val.address, cachedLogo);
       }
       val.logo = cachedLogo;
     }
@@ -67,10 +64,7 @@ async function setLogos(vals: Validator[], chunkSize = 10) {
       chunk.map(async (val) => {
         const logo = await fetchLogo(val.info.identity);
         if (logo) {
-          localStorage.setItem(
-            "nomic/validator/logo/" + val.address,
-            JSON.stringify(logo).replace(/"/g, "")
-          );
+          localStorage.setItem('nomic/validator/logo/' + val.address, JSON.stringify(logo).replace(/"/g, ''));
         }
         val.logo = logo;
       })
@@ -79,7 +73,7 @@ async function setLogos(vals: Validator[], chunkSize = 10) {
   }
 }
 
-export async function getAllValidators(nomic: Nomic): Promise<Validator[]> {
+export async function getAllValidators(nomic: OraiBtc): Promise<Validator[]> {
   const validators = (await nomic.allValidators())
     .map((rawVal) => {
       try {
@@ -92,7 +86,7 @@ export async function getAllValidators(nomic: Nomic): Promise<Validator[]> {
           commission: parseFloat(rawVal.commission),
           isActive: rawVal.inActiveSet,
           isJailed: rawVal.jailed,
-          votingPower: rawVal.amountStaked,
+          votingPower: rawVal.amountStaked
         };
         return new Validator(validator);
       } catch (e) {
@@ -112,13 +106,13 @@ export async function fetchLogo(identity: string): Promise<string | undefined> {
   }
   try {
     const res = await fetch(
-      "https://keybase.io/_/api/1.0/user/lookup.json?" +
+      'https://keybase.io/_/api/1.0/user/lookup.json?' +
         new URLSearchParams({
-          fields: "pictures",
-          key_suffix: identity,
+          fields: 'pictures',
+          key_suffix: identity
         }),
       {
-        mode: "cors",
+        mode: 'cors'
       }
     ).then((response) =>
       response.json().then((json) => {

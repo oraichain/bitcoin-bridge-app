@@ -1,6 +1,5 @@
 import { Wallet } from './wallet';
 import detectEthereumProvider from '@metamask/detect-provider';
-import { OraiBtc } from '@oraichain/oraibtc-wasm';
 import { makeStdTx } from '@cosmjs/amino';
 import { fromRpcSig, ecrecover, hashPersonalMessage } from '@ethereumjs/util';
 import secp256k1 from 'secp256k1';
@@ -12,8 +11,6 @@ export class Metamask implements Wallet {
   name? = 'Metamask';
   logo = '/metamask.svg';
   queryableBalances = ['OraiBtcSubnet'];
-
-  constructor(private readonly nomic: OraiBtc) {}
 
   async isPresent() {
     const ethereumProvider = await detectEthereumProvider();
@@ -28,7 +25,6 @@ export class Metamask implements Wallet {
 
     localStorage.setItem('nomic/wallet', 'metamask');
     this.ethAddress = accounts[0];
-    this.address = this.nomic.convertEthAddress(accounts[0]);
     this.connected = true;
   }
 
