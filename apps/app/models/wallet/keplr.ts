@@ -123,8 +123,8 @@ export class Keplr implements Wallet {
           coinDecimals: 6
         },
         {
-          coinDenom: 'oBTC',
-          coinMinimalDenom: 'uoBTC',
+          coinDenom: 'usat',
+          coinMinimalDenom: 'usat',
           coinDecimals: 14
         }
       ],

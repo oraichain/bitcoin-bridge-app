@@ -52,7 +52,7 @@ export const SwapInterface = observer(({ chainBalances, sourceChain, destination
 
   const transferBitcoinOut = async () => {
     try {
-      await nomic.ibcTransferOut(transferAmount, 'uoBTC', destinationAddress, destinationChain.destination.channelId, destinationChain.destination.port);
+      await nomic.ibcTransferOut(transferAmount, 'usat', destinationAddress, destinationChain.destination.channelId, destinationChain.destination.port);
     } catch (e) {
       //need to check if osmosis tries to add the chain
       error.setErrorMessage(e.message);

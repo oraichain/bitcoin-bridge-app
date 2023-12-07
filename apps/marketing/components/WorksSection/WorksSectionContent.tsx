@@ -18,9 +18,9 @@ export const WorksSectionContent = () => {
         <p className="text-textSecondary font-light w-3/4">OraiBtcSubnet makes it easy to use your Bitcoin on any IBC-enabled chain</p>
       </div>
       <div className="mt-8 w-full flex flex-col lg:flex-row justify-center align-middle z-10 gap-6">
-        <StepCard step={'01'} icon={<Image src={DepositBitcoin} alt="Deposit Bitcoin" />} title="Deposit BTC" description="Send BTC to your deposit address. oBTC will show up in your wallet." className={'h-full w-full lg:w-1/3'} />
-        <StepCard step={'02'} icon={<Image src={DefiBitcoin} alt="Defi Bitcoin" />} title="Use oBTC in DeFi Protocols" description="Use your oBTC on Osmosis, The Cosmos Hub, and more." className={'h-full w-full lg:w-1/3 lg:mt-12'} />
-        <StepCard step={'03'} icon={<Image src={RedeemBitcoin} alt="Redeem Bitcoin" />} title="Withdraw oBTC for BTC" description="Transfer back to your Bitcoin wallet." className={'h-full w-full lg:w-1/3 lg:mt-24'} />
+        <StepCard step={'01'} icon={<Image src={DepositBitcoin} alt="Deposit Bitcoin" />} title="Deposit BTC" description="Send BTC to your deposit address. usat will show up in your wallet." className={'h-full w-full lg:w-1/3'} />
+        <StepCard step={'02'} icon={<Image src={DefiBitcoin} alt="Defi Bitcoin" />} title="Use usat in DeFi Protocols" description="Use your usat on Osmosis, The Cosmos Hub, and more." className={'h-full w-full lg:w-1/3 lg:mt-12'} />
+        <StepCard step={'03'} icon={<Image src={RedeemBitcoin} alt="Redeem Bitcoin" />} title="Withdraw usat for BTC" description="Transfer back to your Bitcoin wallet." className={'h-full w-full lg:w-1/3 lg:mt-24'} />
       </div>
     </div>
   );

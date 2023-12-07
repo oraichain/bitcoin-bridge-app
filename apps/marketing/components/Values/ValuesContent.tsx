@@ -22,7 +22,7 @@ export const ValuesContent = () => {
               <b>OraiBtcSubnet</b> is a layer-1 blockchain which offers a decentralized, non-custodial Bitcoin bridge.
             </p>
             <p>
-              <b>oBTC</b> is a token that represents 1:1 ownership of Bitcoin in an IBC-compatible token.
+              <b>usat</b> is a token that represents 1:1 ownership of Bitcoin in an IBC-compatible token.
             </p>
             <p>
               <b>oraibtc</b> is a token used for securing the network which can be staked to earn Bitcoin rewards.

@@ -30,12 +30,12 @@ export const OraiBtcSubnetChain: IbcChain = {
   chainId: config.chainId,
   rpcEndpoint: config.rpcUrl,
   source: {
-    channelId: 'channel-4',
+    channelId: 'channel-0',
     port: 'transfer',
-    nBtcIbcDenom: 'uoBTC'
+    nBtcIbcDenom: 'usat'
   },
   destination: {
-    channelId: 'channel-166',
+    channelId: 'channel-167',
     port: 'wasm.orai195269awwnt5m6c843q6w7hp8rt0k7syfu9de4h0wz384slshuzps8y7ccm'
   },
   locked: true

@@ -7,7 +7,7 @@ class Config {
   relayerUrl: string;
 
   constructor() {
-    this.chainId = 'OraiBtcSubnet';
+    this.chainId = 'oraibtc-subnet-1';
     this.chainName = 'OraiBtcSubnet';
     this.stakingUrl = '';
     this.rpcUrl = 'https://oraibtc.rpc.orai.io';
