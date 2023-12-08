@@ -10,6 +10,8 @@
     "build:mock": "NEXT_PUBLIC_APP_ENV=mock nx build --verbose",
     "build:testnet": "NEXT_PUBLIC_APP_ENV=testnet nx build --verbose",
     "build:mainnet": "NEXT_PUBLIC_APP_ENV=mainnet nx build",
+    "bundle:testnet": "NEXT_PUBLIC_APP_ENV=testnet yarn nx export --verbose",
+    "bundle:mainnet": "NEXT_PUBLIC_APP_ENV=mainnet yarn nx export",
     "test": "nx test"
   },
   "private": true,
