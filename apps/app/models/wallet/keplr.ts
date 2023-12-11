@@ -92,11 +92,10 @@ export class Keplr implements Wallet {
         }
       ],
       stakeCurrency: {
-        coinDenom: 'STAKE',
-        coinMinimalDenom: 'stake',
+        coinDenom: 'orai',
+        coinMinimalDenom: 'orai',
         coinDecimals: 6
       },
-      walletUrlForStaking: config.stakingUrl,
       features: ['stargate']
     });
 
