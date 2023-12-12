@@ -21,7 +21,6 @@ export const WalletInfoAddressField = () => {
   };
 
   const getTruncation = () => {
-    console.log(nomic.wallet);
     return nomic.wallet.address.slice(0, 12) + '...' + nomic.wallet.address.slice(-5);
   };
 
