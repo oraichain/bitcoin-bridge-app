@@ -46,18 +46,20 @@ export class NomicClient implements NomicClientInterface {
     makeAutoObservable(this);
   }
 
-  getCurrentWallet(): Wallet | null {
+  async getCurrentWallet(): Promise<Wallet | null> {
     const currentWallet = localStorage.getItem('nomic/wallet');
 
-    let wallet = null;
     if (currentWallet === 'keplr') {
-      wallet = new Keplr() as Wallet;
+      const wallet = new Keplr();
+      return wallet;
     } else if (currentWallet === 'metamask') {
-      wallet = new Metamask() as Wallet;
+      const wallet = new Metamask();
+      if (!wallet.connected) {
+        await wallet.connect();
+      }
       wallet.address = this.nomic.convertEthAddress(wallet.ethAddress);
+      return wallet;
     }
-
-    return wallet;
   }
 
   disconnectWallet() {

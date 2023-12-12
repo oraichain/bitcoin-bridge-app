@@ -19,7 +19,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
     async function init() {
       await nomic.init();
       setInitialized(true);
-      const wallet = nomic.getCurrentWallet();
+      const wallet = await nomic.getCurrentWallet();
       if (wallet && !wallet.connected) {
         await wallet.connect();
         nomic.wallet = wallet;

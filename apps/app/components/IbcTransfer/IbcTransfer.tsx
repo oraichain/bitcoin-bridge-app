@@ -3,7 +3,7 @@ import { NomicContext } from '../../contexts/NomicContext';
 import { Card } from '@nomic-ui/components';
 import { SwapInterface } from './SwapInterface';
 import { IncomingIbcHeader } from './IncomingIbcHeader';
-import { Chains, OraichainChain, OraiBtcSubnetChain } from '../../models/ibc-chain';
+import { Chains } from '../../models/ibc-chain';
 import { Metamask } from '../../models/wallet/metamask';
 import { observer } from 'mobx-react-lite';
 

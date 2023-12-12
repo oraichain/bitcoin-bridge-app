@@ -1,10 +1,10 @@
-import { Validator } from "../validator";
-import { DepositAddress } from "../deposit-address";
-import { IbcChain } from "../ibc-chain";
-import { Wallet } from "../wallet/wallet";
-import { UnbondingValidator } from "../unbonding-validator";
-import { StakedValidator } from "../staked-validator";
-import { Airdrop, Incentives } from "../reward";
+import { Validator } from '../validator';
+import { DepositAddress } from '../deposit-address';
+import { IbcChain } from '../ibc-chain';
+import { Wallet } from '../wallet/wallet';
+import { UnbondingValidator } from '../unbonding-validator';
+import { StakedValidator } from '../staked-validator';
+import { Airdrop, Incentives } from '../reward';
 
 export abstract class NomicClientInterface {
   readonly modifier = BigInt(1e6);
@@ -37,7 +37,7 @@ export abstract class NomicClientInterface {
   init: () => Promise<void>;
   build: () => Promise<void>;
 
-  getCurrentWallet: () => (Wallet | null);
+  getCurrentWallet: () => Promise<Wallet | null>;
   disconnectWallet: () => void;
   clearUserState: () => Promise<void>;
 
@@ -49,9 +49,7 @@ export abstract class NomicClientInterface {
   joinRewardAccounts: () => Promise<void>;
 
   updateValidators: () => Promise<void>;
-  getValidator: (
-    address: string
-  ) => Validator | StakedValidator | undefined;
+  getValidator: (address: string) => Validator | StakedValidator | undefined;
   delegate: (validatorAddress: string, uNom: bigint) => Promise<void>;
   undelegate: (address: string, uNom: bigint) => Promise<void>;
   redelegate: (from: string, to: string, uNom: bigint) => Promise<void>;
@@ -63,13 +61,7 @@ export abstract class NomicClientInterface {
   getValueLocked: () => Promise<void>;
 
   claimIncomingIbc: () => Promise<void>;
-  ibcTransferOut: (
-    amount: bigint,
-    denom: string,
-    destinationAddress: string,
-    channelId: string,
-    portId: string,
-  ) => Promise<void>;
+  ibcTransferOut: (amount: bigint, denom: string, destinationAddress: string, channelId: string, portId: string) => Promise<void>;
   ibcTransferIn: (amount: bigint, destinationAddress: string, senderChain: IbcChain) => Promise<void>;
   getChainBalance: (chainId: IbcChain) => Promise<bigint>;
   getRewardBalances: () => Promise<void>;
