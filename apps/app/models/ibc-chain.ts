@@ -47,12 +47,12 @@ export const OraichainChain: IbcChain = {
   chainId: 'Oraichain',
   rpcEndpoint: 'https://rpc.orai.io',
   source: {
-    channelId: 'channel-166',
+    channelId: 'channel-167',
     port: 'wasm.orai195269awwnt5m6c843q6w7hp8rt0k7syfu9de4h0wz384slshuzps8y7ccm',
-    nBtcIbcDenom: 'ibc/DCDCAF4399A0804D177740C634E305B2CB3A0137789A26EDC3E4B18FC4F2D176'
+    nBtcIbcDenom: 'usat'
   },
   destination: {
-    channelId: 'channel-4',
+    channelId: 'channel-0',
     port: 'transfer'
   },
   locked: true

@@ -312,6 +312,9 @@ export class NomicClient implements NomicClientInterface {
     const timeoutTimestampSeconds = Math.floor((Date.now() + 60 * 60 * 1000) / 1000);
     const timeoutTimestampNanoseconds = Long.fromNumber(timeoutTimestampSeconds).multiply(1000000000);
 
+
+    console.log(senderChain)
+
     const transferMsg = {
       typeUrl: '/ibc.applications.transfer.v1.MsgTransfer',
       value: {
