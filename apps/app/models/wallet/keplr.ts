@@ -2,7 +2,8 @@ import { Key } from '@keplr-wallet/types';
 import { Wallet } from './wallet';
 import { config } from '../../config';
 import { ChainInfo, OraiBtcSubnetChain } from '../ibc-chain';
-import { SigningStargateClient } from '@cosmjs/stargate';
+// import { SigningStargateClient } from '@cosmjs/stargate';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { makeStdTx } from '@cosmjs/amino';
 
 export class Keplr implements Wallet {
@@ -10,7 +11,7 @@ export class Keplr implements Wallet {
   connected = false;
   name?: string;
   logo = '/keplr.svg';
-  queryableBalances = ['Oraichain', 'OraiBtcSubnet'];
+  queryableBalances = ['Oraichain Mainnet', 'OraiBtcSubnet'];
 
   key?: Key;
 
@@ -48,7 +49,7 @@ export class Keplr implements Wallet {
   async provideSigner(chain: ChainInfo) {
     const offlineSigner = await window.keplr.getOfflineSigner(OraiBtcSubnetChain.chainId);
     try {
-      const cosmJs = await SigningStargateClient.connectWithSigner(chain.rpcEndpoint, offlineSigner);
+      const cosmJs = await SigningCosmWasmClient.connectWithSigner(chain.rpcEndpoint, offlineSigner);
       return cosmJs;
     } catch (e) {
       console.error(e);

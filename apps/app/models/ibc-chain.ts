@@ -58,4 +58,6 @@ export const OraichainChain: IbcChain = {
   locked: true
 };
 
+export const OBTCContractAddress = "orai1d2hq8pzf0nswlqhhng95hkfnmgutpmz6g8hd8q7ec9q9pj6t3r2q7vc646";
+
 export const Chains: IbcChain[] = [OraiBtcSubnetChain, OraichainChain];

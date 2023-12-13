@@ -5,7 +5,7 @@ import { Delegation, getDelegations } from '../delegation';
 import { makeAutoObservable } from 'mobx';
 import { config } from '../../config';
 import { SigningStargateClient, GasPrice, MsgTransferEncodeObject } from '@cosmjs/stargate';
-import { IbcChain, OraichainChain, OraiBtcSubnetChain } from '../ibc-chain';
+import { IbcChain, OraichainChain, OraiBtcSubnetChain, OBTCContractAddress } from '../ibc-chain';
 import { Decimal } from '@cosmjs/math';
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
 import { Wallet } from '../wallet/wallet';
@@ -342,11 +342,15 @@ export class NomicClient implements NomicClientInterface {
       const chainInfo = await window.keplr.getKey(chain.chainId);
       const sourceAddr = chainInfo.bech32Address;
 
-      const balance = await cosmJS.getBalance(sourceAddr, chain.source.nBtcIbcDenom);
-      cosmJS.disconnect();
-      return BigInt(balance.amount);
+      const { balance } = await cosmJS.queryContractSmart(OBTCContractAddress, {
+        balance: {
+          address: sourceAddr
+        }
+      })
+
+      return Decimal.fromAtomics(balance, 6).toString();
     } catch (e) {
-      return 0n;
+      return "0";
     }
   }
   public async refreshState() {

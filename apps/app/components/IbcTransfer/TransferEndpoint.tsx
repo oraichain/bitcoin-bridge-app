@@ -22,6 +22,7 @@ export const TransferEndpoint = observer(
     balance,
   }: TransferEndpointProps) => {
     const nomic = useContext(NomicContext);
+
     const displayBalance = nomic.wallet?.queryableBalances.includes(chain.name);
 
     return (
