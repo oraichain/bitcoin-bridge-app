@@ -5,7 +5,7 @@ import { TransferEndpoint } from './TransferEndpoint';
 import { useContext, useEffect, useState } from 'react';
 import { NomicContext } from '../../contexts/NomicContext';
 import { ErrorContext } from '../../contexts/ErrorContext';
-import { IbcChain } from '../../models/ibc-chain';
+import { Chains, IbcChain } from '../../models/ibc-chain';
 import { displayBtc } from '@nomic-ui/utils';
 import { config } from '../../config';
 import { Metamask } from '../../models/wallet/metamask';
@@ -28,6 +28,7 @@ export const SwapInterface = observer(({ chainBalances, sourceChain, destination
   const [transferAmount, setTransferAmount] = useState(0n);
   const [transferLoading, setTransferLoading] = useState(false);
   const [destinationAddress, setDestinationAddress] = useState('');
+  const [bitcoinAddress, setBitcoinAddress] = useState('');
 
   useEffect(() => {
     if (document.getElementById('ibc_input') as HTMLInputElement) {
@@ -64,7 +65,7 @@ export const SwapInterface = observer(({ chainBalances, sourceChain, destination
 
   const transferBitcoinIn = async () => {
     try {
-      await nomic.ibcTransferIn(transferAmount, destinationAddress, sourceChain);
+      await nomic.ibcTransferIn(transferAmount, destinationAddress, sourceChain, bitcoinAddress);
       setTransferAmount(0n);
     } catch (e) {
       error.setErrorMessage(e.message);
@@ -170,7 +171,26 @@ export const SwapInterface = observer(({ chainBalances, sourceChain, destination
             </div>
           </button>
         )}
+
       </div>
+      {
+          destinationChain.chainId == Chains[0].chainId ? (
+            <div className="w-full relative border border-textTertiary rounded-md px-3 py-2 shadow-sm mt-3">
+            <label htmlFor="name" className="absolute -top-2 left-2 -mt-px inline-block px-1 bg-surface text-xs font-medium text-textSecondary">
+              Bitcoin Address (Optional)
+            </label>
+            <input
+              type="string"
+              id="address_input"
+              autoComplete="off"
+              className="bg-surface block w-full border-0 p-0 text-textPrimary placeholder-textSecondary focus:ring-0 focus:outline-none"
+              onChange={(e) => {
+                setBitcoinAddress(e.target.value);
+              }}
+            />
+          </div>
+          ): null
+        }
       <LoadableButton
         className={'w-full mt-4'}
         activeText={'Transfer'}

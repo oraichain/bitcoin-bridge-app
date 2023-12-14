@@ -12,6 +12,7 @@ export const IncomingIbcHeader = observer(({ updateBalances }: Props) => {
   const nomic = useContext(NomicContext);
   const [claimLoading, setClaimLoading] = useState(false);
 
+
   return nomic.incomingIbcNbtcBalance > 0 ? (
     <div className="flex justify-between bg-surface px-6 py-6 border-surfaceDark rounded-lg leading-none w-full">
       <div className="flex flex-col justify-center align-middle gap-1">
@@ -19,7 +20,7 @@ export const IncomingIbcHeader = observer(({ updateBalances }: Props) => {
           Incoming Ibc Bitcoin Balance
         </h3>
         <p className="text-md font-semibold text-textPrimary truncate">
-          {displayBtc(nomic.incomingIbcNbtcBalance)}
+          {displayBtc(BigInt(Number(nomic.incomingIbcNbtcBalance) / 1e8))}
         </p>
       </div>
       <div className="flex flex-row gap-8">
