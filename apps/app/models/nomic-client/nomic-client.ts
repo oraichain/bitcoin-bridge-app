@@ -375,7 +375,7 @@ export class NomicClient implements NomicClientInterface {
         }
       });
 
-      return BigInt(Decimal.fromAtomics(balance, 0).toString());
+      return BigInt(Decimal.fromUserInput(balance, 8).atomics.toString());
     } catch (e) {
       return 0n;
     }
