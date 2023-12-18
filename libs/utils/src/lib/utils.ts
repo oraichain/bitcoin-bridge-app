@@ -22,7 +22,7 @@ export const displayNom = (amount: bigint, displayDenom = false): string => {
 };
 
 export const displayBtc = (amount: bigint, displayDenom = true): string => {
-  return toRoundedString(Number(amount) / 1e6, 6, true) + (displayDenom ? ' BTC' : '');
+  return toRoundedString(Number(amount) / 1e14, 6, true) + (displayDenom ? ' BTC' : '');
 };
 
 export const displayUsd = (amount: number): string => {
