@@ -384,14 +384,24 @@ export class NomicClient implements NomicClientInterface {
     await Promise.all([this.getValidators(), this.getBalance(), this.getNomRewardBalance(), this.getNbtcRewardBalance(), this.getRewardBalances(), this.getNbtcBalance()]);
   }
 
-  public async generateAddress() {
+  public async generateAddress(destination?: string) {
     if (!this.wallet?.address) {
       return;
     }
 
     const btcAddress = await this.nomic.generateDepositAddress(this.wallet.address);
+
     await this.nomic.broadcastDepositAddress(this.wallet.address, btcAddress.sigsetIndex, [config.relayerUrl], btcAddress.address); // (make sure this succeeds before showing the btc address to the user)
-    this.depositAddress = btcAddress;
+
+    if (destination) {
+      const [channel, receiver] = destination.split('/', 2);
+      try {
+        fromBech32(receiver);
+        this.depositAddress = await this.nomic.generateDepositAddress(receiver, channel, this.wallet.address);
+      } catch {}
+    }
+
+    if (!this.depositAddress) this.depositAddress = btcAddress;
   }
 
   public async withdrawBitcoin(address: string, sats: bigint) {

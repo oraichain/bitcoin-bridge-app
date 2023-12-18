@@ -9,6 +9,7 @@ import { AddressAnimation } from './AddressAnimation';
 import { NomicContext } from '../../contexts/NomicContext';
 import { displayBtc, displayPercentage, removeUrlQueryParams } from '@nomic-ui/utils';
 import { useRouter } from 'next/router';
+import { fromBech32, toBech32 } from '@cosmjs/encoding';
 
 interface SocketMessage {
   addr: string;
@@ -26,12 +27,14 @@ export const AddressModal = observer(() => {
   const socket = useRef<WebSocket | null>(null);
 
   useEffect(() => {
+    if (!nomic.wallet?.address) return;
+
     async function getAddress() {
       if (nomic.depositAddress) {
         return;
       }
 
-      await nomic.generateAddress();
+      await nomic.generateAddress(`channel-167/${toBech32('orai', fromBech32(nomic.wallet?.address).data)}`);
     }
 
     getAddress();
@@ -113,6 +116,20 @@ export const AddressModal = observer(() => {
             <AddressAnimation />
             <div className="w-full text-center text-sm text-red-400 font-bold">
               <h3>This address is valid for 4 days. Deposits sent after this time will be lost.</h3>
+            </div>
+            <div className="relative border border-textTertiary rounded-md px-3 py-2 shadow-sm w-full">
+              <label htmlFor="name" className="absolute -top-2 left-2 -mt-px inline-block px-1 bg-surfaceModal text-xs font-medium text-textSecondary">
+                Channel/Receiver
+              </label>
+              {nomic.wallet?.address && (
+                <input
+                  type="text"
+                  id="delegation-input"
+                  defaultValue={`channel-167/${toBech32('orai', fromBech32(nomic.wallet?.address).data)}`}
+                  autoComplete="off"
+                  className="bg-surfaceModal block w-full border-0 p-0 text-textPrimary placeholder-textSecondary focus:ring-0 sm:text-sm focus:outline-none"
+                />
+              )}
             </div>
             <div className="px-4 pb-4 text-sm text-textSecondary font-bold w-full">
               <div className="flow-root">

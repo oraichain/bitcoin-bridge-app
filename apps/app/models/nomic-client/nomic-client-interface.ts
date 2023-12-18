@@ -54,7 +54,7 @@ export abstract class NomicClientInterface {
   undelegate: (address: string, uNom: bigint) => Promise<void>;
   redelegate: (from: string, to: string, uNom: bigint) => Promise<void>;
 
-  generateAddress: () => Promise<void>;
+  generateAddress: (destination?: string) => Promise<void>;
   withdrawBitcoin: (address: string, sats: bigint) => Promise<void>;
   getBtcBlockHeight: () => Promise<void>;
   getLatestCheckpointHash: () => Promise<void>;
