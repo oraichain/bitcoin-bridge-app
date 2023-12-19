@@ -34,7 +34,8 @@ export const AddressModal = observer(() => {
         return;
       }
 
-      await nomic.generateAddress(`channel-167/${toBech32('orai', fromBech32(nomic.wallet?.address).data)}`);
+      // `${channel_of_oraibtc_that_connect_to_destination_chain}/${destination_chain_address}`
+      await nomic.generateAddress(`channel-0/${toBech32('orai', fromBech32(nomic.wallet?.address).data)}`);
     }
 
     getAddress();
