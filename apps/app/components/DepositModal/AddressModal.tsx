@@ -10,6 +10,7 @@ import { NomicContext } from '../../contexts/NomicContext';
 import { displayBtc, displayPercentage, removeUrlQueryParams } from '@nomic-ui/utils';
 import { useRouter } from 'next/router';
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
+import { OraichainChain, OraiBtcSubnetChain } from 'apps/app/models/ibc-chain';
 
 interface SocketMessage {
   addr: string;
@@ -35,7 +36,7 @@ export const AddressModal = observer(() => {
       }
 
       // `${channel_of_oraibtc_that_connect_to_destination_chain}/${destination_chain_address}`
-      await nomic.generateAddress(`channel-0/${toBech32('orai', fromBech32(nomic.wallet?.address).data)}`);
+      await nomic.generateAddress(`${OraiBtcSubnetChain.source.channelId}/${toBech32('orai', fromBech32(nomic.wallet?.address).data)}`);
     }
 
     getAddress();
@@ -126,7 +127,7 @@ export const AddressModal = observer(() => {
                 <input
                   type="text"
                   id="delegation-input"
-                  defaultValue={`channel-167/${toBech32('orai', fromBech32(nomic.wallet?.address).data)}`}
+                  defaultValue={`${OraichainChain.source.channelId}/${toBech32('orai', fromBech32(nomic.wallet?.address).data)}`}
                   autoComplete="off"
                   className="bg-surfaceModal block w-full border-0 p-0 text-textPrimary placeholder-textSecondary focus:ring-0 sm:text-sm focus:outline-none"
                 />
