@@ -2181,7 +2181,7 @@
     yargs "^17.6.2"
     yargs-parser "21.1.1"
 
-"@oraichain/oraibtc-wasm@1.0.4":
+"@oraichain/oraibtc-wasm@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@oraichain/oraibtc-wasm/-/oraibtc-wasm-1.0.4.tgz#82bdbb1910b08f0f94d27866499cd44f340284cd"
   integrity sha512-Yi9jUnpDZs+x5NvKk1gQUtUs98THvwCFg4OjRu6LO1H8drvKvcS/TQeIDoJ7noexevP5yDU6of/N5qUNV4h6TA==

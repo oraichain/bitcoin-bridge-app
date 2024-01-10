@@ -21,9 +21,6 @@ export abstract class NomicClientInterface {
   nbtcRewardBalance: bigint | null;
   incomingIbcNbtcBalance: bigint;
 
-  airdropBalances: Airdrop;
-  incentiveBalances: Incentives | null = null;
-
   validators: Validator[];
   stakedValidators: StakedValidator[];
   unbondingValidators: UnbondingValidator[];
@@ -43,9 +40,6 @@ export abstract class NomicClientInterface {
 
   claimStakingRewards: () => Promise<void>;
 
-  claimAirdrop1: () => Promise<void>;
-  claimAirdrop2: () => Promise<void>;
-  claimTestnetParticipationIncentives: () => Promise<void>;
   joinRewardAccounts: () => Promise<void>;
 
   updateValidators: () => Promise<void>;

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "REACT_APP_ENV=development nx serve",
+    "start": "NEXT_PUBLIC_APP_ENV=mainnet REACT_APP_ENV=development nx serve",
     "start:mock": "NEXT_PUBLIC_APP_ENV=mock nx serve",
     "start:internal": "NEXT_PUBLIC_APP_ENV=internal nx serve",
     "start:testnet": "NEXT_PUBLIC_APP_ENV=testnet nx serve",
@@ -28,7 +28,7 @@
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/eth-sig-util": "^5.0.2",
     "@nrwl/next": "15.4.2",
-    "@oraichain/oraibtc-wasm": "1.0.4",
+    "@oraichain/oraibtc-wasm": "^1.0.4",
     "@types/secp256k1": "^4.0.3",
     "core-js": "^3.6.5",
     "cosmjs-types": "^0.8.0",
