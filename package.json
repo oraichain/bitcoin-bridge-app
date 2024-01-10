@@ -28,7 +28,7 @@
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/eth-sig-util": "^5.0.2",
     "@nrwl/next": "15.4.2",
-    "@oraichain/oraibtc-wasm": "^0.7.7",
+    "@oraichain/oraibtc-wasm": "1.0.4",
     "@types/secp256k1": "^4.0.3",
     "core-js": "^3.6.5",
     "cosmjs-types": "^0.8.0",
