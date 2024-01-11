@@ -28,7 +28,7 @@ export default function Custom404() {
     <div className="min-w-128 flex flex-col gap-6 h-full w-full justify-center items-center">
       <div className="-mt-8">
         <h1>Welcome to OraiBtc Subnet dApp!</h1>
-        <Button onClick={sendToken}>Send</Button>
+        
       </div>
     </div>
   );

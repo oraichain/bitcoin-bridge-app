@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "NEXT_PUBLIC_APP_ENV=mainnet REACT_APP_ENV=development nx serve",
+    "start": "REACT_APP_ENV=development nx serve",
     "start:mock": "NEXT_PUBLIC_APP_ENV=mock nx serve",
     "start:internal": "NEXT_PUBLIC_APP_ENV=internal nx serve",
     "start:testnet": "NEXT_PUBLIC_APP_ENV=testnet nx serve",
