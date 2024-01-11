@@ -183,8 +183,8 @@ export class NomicClient implements NomicClientInterface {
   }
 
   public async getRewardBalances() {
-    this.airdropBalances = await this.nomic.airdropBalances(this.wallet.address);
-    this.incentiveBalances = await this.nomic.incentiveBalances(this.wallet.address);
+    // this.airdropBalances = await this.nomic.airdropBalances(this.wallet.address);
+    // this.incentiveBalances = await this.nomic.incentiveBalances(this.wallet.address);
   }
 
   async getNoLogValidators() {
@@ -204,21 +204,21 @@ export class NomicClient implements NomicClientInterface {
   }
 
   public async claimAirdrop1() {
-    const data = await this.nomic.claimAirdrop1(this.wallet.address);
-    await this.wallet.sign(data);
-    await Promise.all([this.getBalance(), this.getNbtcBalance(), this.getNomRewardBalance(), this.getNbtcRewardBalance(), this.getRewardBalances()]);
+    // const data = await this.nomic.claimAirdrop1(this.wallet.address);
+    // await this.wallet.sign(data);
+    // await Promise.all([this.getBalance(), this.getNbtcBalance(), this.getNomRewardBalance(), this.getNbtcRewardBalance(), this.getRewardBalances()]);
   }
 
   public async claimAirdrop2() {
-    const data = await this.nomic.claimAirdrop2(this.wallet.address);
-    await this.wallet.sign(data);
-    await Promise.all([this.getBalance(), this.getNbtcBalance(), this.getNomRewardBalance(), this.getNbtcRewardBalance(), this.getRewardBalances()]);
+    // const data = await this.nomic.claimAirdrop2(this.wallet.address);
+    // await this.wallet.sign(data);
+    // await Promise.all([this.getBalance(), this.getNbtcBalance(), this.getNomRewardBalance(), this.getNbtcRewardBalance(), this.getRewardBalances()]);
   }
 
   public async claimTestnetParticipationIncentives() {
-    const data = await this.nomic.claimTestnetParticipationIncentives(this.wallet.address);
-    await this.wallet.sign(data);
-    await Promise.all([this.getBalance()]);
+    // const data = await this.nomic.claimTestnetParticipationIncentives(this.wallet.address);
+    // await this.wallet.sign(data);
+    // await Promise.all([this.getBalance()]);
   }
 
   public async joinRewardAccounts() {
@@ -232,16 +232,16 @@ export class NomicClient implements NomicClientInterface {
 
     const evmosKeyData = fromBech32(evmosKey.bech32Address).data;
     const evmosNomicAddress = toBech32('oraibtc', evmosKeyData);
-    const evmosAirdropBalance = await this.nomic.airdropBalances(evmosNomicAddress);
-    const evmosIncentiveBalances = await this.nomic.incentiveBalances(evmosNomicAddress);
-    const evmosAirdropClaimedState = localStorage.getItem('nomic/evmosAirdropClaimAttempted/' + this.wallet.address);
+    // const evmosAirdropBalance = await this.nomic.airdropBalances(evmosNomicAddress);
+    // const evmosIncentiveBalances = await this.nomic.incentiveBalances(evmosNomicAddress);
+    // const evmosAirdropClaimedState = localStorage.getItem('nomic/evmosAirdropClaimAttempted/' + this.wallet.address);
 
     // this local storage key will need to change for both testnet and mainnet
-    const balanceEligible = evmosAirdropBalance.total() > 0n || evmosIncentiveBalances.total() > 0n;
-    if (!balanceEligible && evmosAirdropClaimedState !== EvmosAirdropState.MOVED) {
-      localStorage.setItem('nomic/evmosAirdropClaimAttempted/' + this.wallet.address, EvmosAirdropState.INELIGIBLE);
-      return;
-    }
+    // const balanceEligible = evmosAirdropBalance.total() > 0n || evmosIncentiveBalances.total() > 0n;
+    // if (!balanceEligible && evmosAirdropClaimedState !== EvmosAirdropState.MOVED) {
+    //   localStorage.setItem('nomic/evmosAirdropClaimAttempted/' + this.wallet.address, EvmosAirdropState.INELIGIBLE);
+    //   return;
+    // }
 
     const data = await this.nomic.joinRewardAccounts(evmosNomicAddress, this.wallet.address);
 
