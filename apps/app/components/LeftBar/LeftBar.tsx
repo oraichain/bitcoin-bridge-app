@@ -13,6 +13,11 @@ const navigation = [
     path: '/staking'
   },
   {
+    name: 'Transfer',
+    icon: ArrowsRightLeftIcon,
+    path: '/send'
+  },
+  {
     name: 'Bitcoin',
     icon: BanknotesIcon,
     path: '/bitcoin'

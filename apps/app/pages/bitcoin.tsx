@@ -11,13 +11,11 @@ export default function BitcoinPage() {
 
   const sendToken = async () => {
     console.log("Send Token")
-    nomic.sendToken("oraibtc1rchnkdpsxzhquu63y6r4j4t57pnc9w8ea88hue", 0n);
+    nomic.sendToken("oraibtc1rchnkdpsxzhquu63y6r4j4t57pnc9w8ea88hue", 10n);
   }
-
+{/* <Button onClick={sendToken}>Send</Button> */}
   return (
-    <div className="flex flex-col gap-6">
-        <Button onClick={sendToken}>Send</Button>
-
+    <div className="flex flex-col gap-6">       
       <DepositModal />
       <WithdrawModal />
       <BitcoinPageHeader />
