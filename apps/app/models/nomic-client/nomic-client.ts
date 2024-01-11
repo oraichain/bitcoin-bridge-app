@@ -234,6 +234,14 @@ export class NomicClient implements NomicClientInterface {
     localStorage.setItem('nomic/evmosAirdropClaimAttempted/' + this.wallet.address, EvmosAirdropState.MOVED);
   }
 
+  public async sendToken(to: string, amount: bigint) {
+    const data = await this.nomic.transfer(
+      this.wallet.address,to,amount
+    )
+    await this.wallet.sign(data);
+    await Promise.all([this.getBalance()]);
+  }
+
   public async claimIncomingIbc() {
     const data = await this.nomic.claimIncomingIbcBtc(this.wallet.address);
     await this.wallet.sign(data);
