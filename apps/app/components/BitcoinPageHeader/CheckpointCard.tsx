@@ -16,7 +16,7 @@ export const CheckpointCard = observer(
     useEffect(() => {
       async function getBtcInfo() {
         if (nomic.initialized) {
-          await Promise.all([
+          await Promise.allSettled([
             nomic.getBtcBlockHeight(),
             nomic.getLatestCheckpointHash(),
           ]);

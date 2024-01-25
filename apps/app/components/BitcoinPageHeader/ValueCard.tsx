@@ -16,7 +16,11 @@ export const ValueCard = observer(({ className = "" }: ValueCardProps) => {
   useEffect(() => {
     async function getData() {
       if (nomic.initialized) {
-        await nomic.getValueLocked();
+        try {
+          await nomic.getValueLocked();
+        } catch (error) {
+          console.log("error getting value locked: ", error)
+        }
       }
       await bitcoin.getBitcoinPrice();
     }

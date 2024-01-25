@@ -55,7 +55,7 @@ export abstract class NomicClientInterface {
   getValueLocked: () => Promise<void>;
 
   claimIncomingIbc: () => Promise<void>;
-  sendToken:(to: string, amount: bigint) => Promise<void>;
+  sendToken:(to: string, amount: bigint) => Promise<bigint>;
   ibcTransferOut: (amount: bigint, denom: string, destinationAddress: string, channelId: string, portId: string) => Promise<void>;
   ibcTransferIn: (amount: bigint, destinationAddress: string, senderChain: IbcChain, bitcoinAddress?: string) => Promise<void>;
   getChainBalance: (chainId: IbcChain) => Promise<bigint>;

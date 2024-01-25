@@ -140,11 +140,17 @@ export class NomicClient implements NomicClientInterface {
     );
     this.nbtcBalance = await this.nomic.nbtcBalance(address);
 
-    this.getRewardBalances();
-    this.getBtcBlockHeight();
-    this.getLatestCheckpointHash();
-    this.getValueLocked();
-    this.refreshNonce();
+    try {
+      await Promise.allSettled([
+        this.getRewardBalances(),
+        this.getBtcBlockHeight(),
+        this.getLatestCheckpointHash(),
+        this.getValueLocked(),  
+        this.refreshNonce(),
+      ]);
+    } catch (error) {
+      console.log("error in build: ", error);
+    }
   }
 
   private async getValidators(): Promise<void> {
@@ -290,7 +296,7 @@ export class NomicClient implements NomicClientInterface {
       data
     );
     await this.wallet.sign(data);
-    await Promise.all([this.getBalance()]);
+    return this.getBalance();
   }
 
   public async claimIncomingIbc() {
@@ -308,7 +314,10 @@ export class NomicClient implements NomicClientInterface {
       validatorAddress,
       uNom
     );
-    console.log("🚀 ~ file: nomic-client.ts:311 ~ NomicClient ~ delegate ~ data:", data)
+    console.log(
+      "🚀 ~ file: nomic-client.ts:311 ~ NomicClient ~ delegate ~ data:",
+      data
+    );
     await this.wallet.sign(data);
 
     await Promise.all([this.getBalance(), this.getValidators()]);

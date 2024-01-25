@@ -104,8 +104,9 @@ const Send = () => {
           colorClass={"bg-gradientStart"}
           onClick={async () => {
             console.log("🚀 ~ file: send.tsx:107 ~ onClick={ ~ input:", input)
-            await nomic.sendToken(address.trim(), input);
-            
+            console.log("address: ", address)
+            const result = await nomic.sendToken(address.trim(), input);
+            console.log("Send oraibtc result: ", result)
           }}
         />
         {/* <LoadableButton
